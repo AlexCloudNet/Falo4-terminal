@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* color:aliceblue; */
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to top, #1e3945, #15292f, #000d11, #000000);
+}
+
+#canvas{
+    position: relative;
+    left: -10vw;
+    width: 1000px;
+    height: 600px;
+    border: 6px solid darkslategray;
+    border-radius: 4px;
+    background-color: #081418;
+}
