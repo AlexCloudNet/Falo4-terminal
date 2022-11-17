@@ -98,8 +98,10 @@ function screen_mtrix(){
     
     for (let i = 0; i < screen.words_count; i++) {
         let start_pos = randomIntFromInterval(1, chars_count - screen.words_length)
-        // start_words[i] = randomIntFromInterval(1, chars_count - screen.words_length)
         if( !start_words.includes(start_pos) ){
+            start_words[i] = start_pos;
+        }else{
+            start_pos += screen.words_length;
             start_words[i] = start_pos;
         }
     }
