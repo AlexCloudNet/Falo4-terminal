@@ -95,16 +95,26 @@ function render_text_terminal(){
 
 function screen_mtrix(){
     let start_words = [];
-    
-    for (let i = 0; i < screen.words_count; i++) {
-        let start_pos = randomIntFromInterval(1, chars_count - screen.words_length)
-        if( !start_words.includes(start_pos) ){
-            start_words[i] = start_pos;
-        }else{
-            start_pos += screen.words_length;
-            start_words[i] = start_pos;
+
+    while(start_words.length < 5){
+        let start_pos = randomIntFromInterval(1, chars_count*2 - screen.words_length)
+        let found = false;
+        for (let i = 0; i < start_words.length; i++) {
+            if(start_words[i] === start_pos){
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            let arr = [];
+            for (let j = 0; j < screen.words_length; j++) {
+                arr.push(start_pos+j); 
+            }
+            start_words.push(arr);
+            
         }
     }
+
     console.log(start_words);
 
     let h_str = 140;
@@ -152,9 +162,9 @@ function screen_mtrix(){
         
     }
     
-    for (let i = 0; i < screen.words_count; i++) {
-        matrix[start_words[i]].char = start_words[i];
-    }
+    // for (let i = 0; i < screen.words_count; i++) {
+    //     matrix[start_words[i]].char = start_words[i];
+    // }
 
     
 console.log(matrix);
