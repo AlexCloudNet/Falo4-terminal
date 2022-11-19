@@ -109,19 +109,12 @@ function screen_mtrix(){
         while ( c-- ) {
             chars_arr[c] = highEnd--
         }
-        
         start_words.push(chars_arr);
-        
         chanks_arr = chanks_arr.filter(i => !chars_arr.includes(i));
     }
-    
-
-    console.log(start_words)
-    
 
     let h_str = 140;
     let w_str = 100;
-
     for (let i = 0; i < chars_count; i++) {
         let char = randomChar();
         let char_w = ctx.measureText(char).width;
@@ -163,13 +156,27 @@ function screen_mtrix(){
         w_str+=20;
         
     }
-    
-    // for (let i = 0; i < screen.words_count; i++) {
-    //     matrix[start_words[i]].char = start_words[i];
-    // }
 
+    let password_obj = {};
+    for (let i = 0; i < screen.words_count; i++) {
+        let arr_num = start_words[i];
+        let arr_w = Array.from(password_arr[i]);
+        arr_num.forEach(function(item, i) {
+            password_obj[item] = arr_w[i];
+        });
+    }
     
+    for (let key in password_obj) {
+        if (password_obj.hasOwnProperty.call(password_obj, key)) {
+            matrix[key].char = password_obj[key];
+        }
+    }
+
+console.log(password_arr);
+
 console.log(matrix);
+
+
 }
 
 function render_pass(matrix){
