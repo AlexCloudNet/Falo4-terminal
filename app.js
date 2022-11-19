@@ -169,6 +169,7 @@ function screen_mtrix(){
     for (let key in password_obj) {
         if (password_obj.hasOwnProperty.call(password_obj, key)) {
             matrix[key].char = password_obj[key];
+            matrix[key].isWord = true;
         }
     }
 
@@ -214,6 +215,9 @@ function draw(){
 }
 
 function color_chanks(e){
+    let x_off = 4,
+        y_off = 12;
+        
     for(let key in matrix){
         if( e.layerX - 4 >= matrix[key].x && 
             e.layerX - 4 <= matrix[key].x + matrix[key].char_w &&
