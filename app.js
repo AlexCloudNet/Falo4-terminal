@@ -161,23 +161,39 @@ function screen_mtrix(){
     for (let i = 0; i < screen.words_count; i++) {
         let arr_num = start_words[i];
         let arr_w = Array.from(password_arr[i]);
+        let data_obj = {};
         arr_num.forEach(function(item, i) {
-            password_obj[item] = arr_w[i];
+            data_obj[item] = arr_w[i];
         });
+        password_obj[password_arr[i]] = data_obj;
     }
     
+        
     for (let key in password_obj) {
         if (password_obj.hasOwnProperty.call(password_obj, key)) {
-            matrix[key].char = password_obj[key];
-            matrix[key].isWord = true;
+            for (let k in password_obj[key]) {
+                matrix[k].char = password_obj[key][k];
+                matrix[k].isWord = true;
+                matrix[k].char_range = Object.keys(password_obj[key]);
+                matrix[k].rect_w = matrix[k].char_range[matrix[k].char_range.length -1];
+
+            }
+            
+            
         }
     }
 
+
 console.log(password_arr);
+console.log(password_obj);
 
 console.log(matrix);
 
-
+}
+let rect_opacity_flag = false;
+let rect_opacity = {
+    chanks: undefined,
+    opacity: 0,
 }
 
 function render_pass(matrix){
@@ -194,7 +210,11 @@ function render_pass(matrix){
 
         ctx.fillStyle = `rgba(2, 165, 4, 1)`;
 
-
+    }
+    if(rect_opacity_flag){
+        rect_opacity.chanks.forEach(elem=>{
+            ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, 10, 18)
+        })
     }
 
 }
@@ -219,12 +239,19 @@ function color_chanks(e){
         y_off = 12;
         
     for(let key in matrix){
-        if( e.layerX - 4 >= matrix[key].x && 
-            e.layerX - 4 <= matrix[key].x + matrix[key].char_w &&
+        
+        if( e.layerX - x_off >= matrix[key].x && 
+            e.layerX - x_off <= matrix[key].x + matrix[key].char_w &&
             e.layerY >= matrix[key].y - 12 &&
             e.layerY <= matrix[key].y + 12
         ){
             matrix[key].opacity = 1;
+                if(matrix[key].isWord){
+                    rect_opacity_flag = true;
+                    rect_opacity.chanks = matrix[key].char_range;
+                }else{
+                    rect_opacity_flag = false;
+                }
         }else{
             matrix[key].opacity = 0;
         }
