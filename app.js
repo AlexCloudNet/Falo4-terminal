@@ -14,7 +14,7 @@ class Falo4Terminal{
 
 Falo4Terminal.getname();
 */
-import { randomChar, randomIntFromInterval } from "./models/randomChar.js";
+import { randomChar, randomIntFromInterval, randomIntervalException } from "./models/randomChar.js";
 
 
 
@@ -95,27 +95,29 @@ function render_text_terminal(){
 
 function screen_mtrix(){
     let start_words = [];
+    let chanks_arr = Array.from(Array(chars_count*2).keys());
 
-    while(start_words.length < 5){
-        let start_pos = randomIntFromInterval(1, chars_count*2 - screen.words_length)
-        let found = false;
-        for (let i = 0; i < start_words.length; i++) {
-            if(start_words[i] === start_pos){
-                found = true;
-                break;
-            }
+    for (let i = 0; i < screen.words_count; i++) {
+        let start_pos = chanks_arr[
+            Math.floor(Math.random()*(chanks_arr.length - screen.words_length))
+        ];
+
+        let chars_arr = [];
+        let highEnd = start_pos+screen.words_length - 1;
+        let lowEnd = start_pos;
+        let c = highEnd - lowEnd + 1;
+        while ( c-- ) {
+            chars_arr[c] = highEnd--
         }
-        if(!found){
-            let arr = [];
-            for (let j = 0; j < screen.words_length; j++) {
-                arr.push(start_pos+j); 
-            }
-            start_words.push(arr);
-            
-        }
+        
+        start_words.push(chars_arr);
+        
+        chanks_arr = chanks_arr.filter(i => !chars_arr.includes(i));
     }
+    
 
-    console.log(start_words);
+    console.log(start_words)
+    
 
     let h_str = 140;
     let w_str = 100;
