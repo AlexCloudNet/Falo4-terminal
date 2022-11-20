@@ -1,3 +1,10 @@
+export let fillers = [
+  ['(', ')'],
+  ['<','>'],
+  ['{', '}'],
+  ['[', ']'],
+]
+
 export function randomChar() {
     let fillers = {
       '1':'(',

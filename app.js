@@ -14,7 +14,7 @@ class Falo4Terminal{
 
 Falo4Terminal.getname();
 */
-import { randomChar, randomIntFromInterval, randomIntervalException } from "./models/randomChar.js";
+import { randomChar, randomIntFromInterval, randomIntervalException, fillers } from "./models/randomChar.js";
 
 
 const canvas = document.getElementById('canvas');
@@ -188,9 +188,39 @@ function screen_mtrix(){
         }
     }
 
+    // Sets of secret character combinations
+    let comb_arr = [];
+
+    for(let elem in matrix){
+        
+        for (let i = 0; i < fillers.length; i++) {
+            if(matrix[elem].char == fillers[i][0]){
+                for(let el in matrix){
+                    if(el <= elem) continue;
+                    // if(el.isWord) break;
+                    if(el == fillers[i][1] ){
+                        matrix[elem].isStartComb = true; 
+                        matrix[el].isEndComb = true; 
+                    }
+                }
+                
+
+                // matrix[elem].isStartComb = true;         
+            }
+        }
+
+        // for (let i = 0; i < fillers.length; i++) {
+        //     if(matrix[elem].char == fillers[i][1]){
+        //         matrix[elem].isEndComb = true;         
+        //     }
+        // }
+            
+    }
+    
 
 console.log(password_obj);
 console.log(matrix);
+
 
 }
 
@@ -208,7 +238,7 @@ function render_pass(matrix){
             rect_opacity.chanks.forEach((elem, i, arr)=>{
 
                 if(i == arr.length - 1 || elem.x == 200 || elem.x == 380){
-                    ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w*2, 18);
+                    ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w + 4, 18);
 
                 }else{
                     ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, 20, 18);
@@ -221,16 +251,6 @@ function render_pass(matrix){
 
             })
         }
-        // matrix[key].hasOwnProperty('char_range')
-        // if(rect_opacity.chanks){
-            
-        //     rect_opacity.chanks.forEach(elem=>{
-        //         ctx.save();
-        //         ctx.fillStyle = `rgba(2, 165, 4, ${matrix[elem].opacity})`;
-        //         ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w + 4, 18)
-        //         ctx.restore();
-        //     })
-        // }
             ctx.save();
             ctx.fillStyle = `rgba(2, 165, 4, ${matrix[key].opacity})`;
             ctx.fillRect(matrix[key].x, matrix[key].y - 14, matrix[key].char_w + 4, 18)
@@ -253,13 +273,12 @@ function main_render(){
     render_text_terminal();
     render_pass(matrix);
 }
-
-// let layerX = '';
+let chank_count = 0;
 function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     main_render();
 
-    // ctx.fillText(layerX, 600, 100);
+    ctx.fillText('chank num: ' + chank_count, 600, 200);
     requestAnimationFrame(draw);
 }
 // setInterval(() => {
@@ -272,6 +291,7 @@ function color_chanks(e){
     let x_off = 4,
         y_off = 12;
         
+        
     for(let key in matrix){
         
         if( e.layerX - x_off >= matrix[key].x && 
@@ -281,6 +301,7 @@ function color_chanks(e){
         ){
             matrix[key].opacity = 1;
             matrix[key].char_color = `#081418`;
+            chank_count = key;
                 if(matrix[key].isWord){
                     // let range_arr = matrix[key].char_range;
                     // range_arr.forEach(elem=>{
@@ -300,5 +321,4 @@ function color_chanks(e){
         
     }
     
-    // layerX = e.layerX - 4;
 }
