@@ -203,37 +203,46 @@ let rect_opacity = {
 function render_pass(matrix){
 
     for (let key in matrix) {
-        // if(rect_opacity_flag){
-        //     rect_opacity.chanks.forEach((elem, i, arr)=>{
-        //         // matrix[elem].char_color = `#081418`;
-        //         if(i == arr.length - 1 || elem.x == 200 || elem.x == 380){
-        //             ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w*2, 18);
+        
+        if(rect_opacity_flag){
+            rect_opacity.chanks.forEach((elem, i, arr)=>{
 
-        //         }else{
-        //             ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, 20, 18);
-        //         }
-        //     })
-        // }
-        // matrix[key].hasOwnProperty('char_range')
-        if(rect_opacity.chanks){
-            
-            rect_opacity.chanks.forEach(elem=>{
-                // ctx.save();
-                ctx.fillStyle = `rgba(2, 165, 4, ${matrix[elem].opacity})`;
-                ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w + 4, 18)
-                // ctx.restore();
+                if(i == arr.length - 1 || elem.x == 200 || elem.x == 380){
+                    ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w*2, 18);
+
+                }else{
+                    ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, 20, 18);
+                }
+                ctx.save();
+                matrix[elem].char_color = `#081418`;
+                ctx.fillStyle = matrix[elem].char_color;
+                ctx.fillText(matrix[elem].char, matrix[elem].x, matrix[elem].y);
+                ctx.restore();
+
             })
         }
+        // matrix[key].hasOwnProperty('char_range')
+        // if(rect_opacity.chanks){
+            
+        //     rect_opacity.chanks.forEach(elem=>{
+        //         ctx.save();
+        //         ctx.fillStyle = `rgba(2, 165, 4, ${matrix[elem].opacity})`;
+        //         ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w + 4, 18)
+        //         ctx.restore();
+        //     })
+        // }
             ctx.save();
             ctx.fillStyle = `rgba(2, 165, 4, ${matrix[key].opacity})`;
             ctx.fillRect(matrix[key].x, matrix[key].y - 14, matrix[key].char_w + 4, 18)
             ctx.restore();
-        
-        
-        
 
-        ctx.fillStyle = matrix[key].char_color;
-        ctx.fillText(matrix[key].char, matrix[key].x, matrix[key].y);
+            ctx.save();
+            ctx.fillStyle = matrix[key].char_color;
+            ctx.fillText(matrix[key].char, matrix[key].x, matrix[key].y);
+            ctx.restore();
+
+            ctx.fillStyle = "rgba(2, 165, 4, 1)";
+
     }
     
 
@@ -273,12 +282,11 @@ function color_chanks(e){
             matrix[key].opacity = 1;
             matrix[key].char_color = `#081418`;
                 if(matrix[key].isWord){
-                    let range_arr = matrix[key].char_range;
-                    range_arr.forEach(elem=>{
-                        matrix[elem].opacity = 1;
-                        matrix[elem].char_color = `#081418`;
-
-                    })
+                    // let range_arr = matrix[key].char_range;
+                    // range_arr.forEach(elem=>{
+                    //     matrix[elem].opacity = 1;
+                    //     matrix[elem].char_color = `#081418`;
+                    // })
                     rect_opacity_flag = true;
                     rect_opacity.chanks = matrix[key].char_range; 
                 }else{
