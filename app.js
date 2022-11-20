@@ -59,8 +59,6 @@ $.ajax({
         screen.words_length = password_arr[0].length;
         screen.password = password_arr[password_arr.length - 1];
 
-        console.log(screen.words_count);
-
         screen_mtrix();
         draw();
         canvas.addEventListener('mousemove', color_chanks);
@@ -95,7 +93,9 @@ function render_text_terminal(){
 
 function screen_mtrix(){
     let start_words = [];
+
     let chanks_arr = Array.from(Array(chars_count*2).keys());
+    console.log(chanks_arr)
 
     for (let i = 0; i < screen.words_count; i++) {
         let start_pos = chanks_arr[
@@ -105,13 +105,19 @@ function screen_mtrix(){
         let chars_arr = [];
         let highEnd = start_pos+screen.words_length - 1;
         let lowEnd = start_pos;
-        let c = highEnd - lowEnd + 1;
-        while ( c-- ) {
-            chars_arr[c] = highEnd--
+        for (let i = lowEnd; i <= highEnd; i++) {
+            chars_arr.push(i);
         }
         start_words.push(chars_arr);
-        chanks_arr = chanks_arr.filter(i => !chars_arr.includes(i));
+
+        for (let j = 0; j < start_words.length; j++) {
+            chanks_arr = chanks_arr.filter(i => !start_words[j].includes(i)); 
+        }
+
     }
+
+    console.log(chanks_arr);
+
 
     let h_str = 140;
     let w_str = 100;
@@ -184,12 +190,11 @@ function screen_mtrix(){
     }
 
 
-console.log(password_arr);
 console.log(password_obj);
-
 console.log(matrix);
 
 }
+
 let rect_opacity_flag = false;
 let rect_opacity = {
     chanks: undefined,
