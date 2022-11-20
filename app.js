@@ -17,8 +17,6 @@ Falo4Terminal.getname();
 import { randomChar, randomIntFromInterval, randomIntervalException } from "./models/randomChar.js";
 
 
-
-
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -100,8 +98,6 @@ function screen_mtrix(){
         result.push(chanks_arr.slice(s, e));
     
     chanks_arr = result;
-    console.log(chanks_arr)
-
     for (let i = 0; i < screen.words_count; i++) {
         
         let chars_arr = chanks_arr[
@@ -110,9 +106,6 @@ function screen_mtrix(){
 
         start_words.push(chars_arr);
 
-        // for (let j = 0; j < start_words.length; j++) {
-        //     chanks_arr = chanks_arr.filter(i => !start_words[j].includes(i)); 
-        // }
         chanks_arr.forEach((elem, i, arr) => {
             if(start_words.length > 0){
                 for (let j = 0; j < start_words.length; j++) {
@@ -124,8 +117,6 @@ function screen_mtrix(){
         })
     }
 
-    console.log(chanks_arr);
-    console.log(start_words);
 
 
     let h_str = 140;
@@ -144,7 +135,8 @@ function screen_mtrix(){
             opacity: chanks_opacity,
             color: `rgba(2, 165, 4, 0)`,
             char: char,
-            char_w: char_w
+            char_w: char_w,
+            char_color: `rgba(2, 165, 4, 1)`
         } 
         w_str+=20;
     }
@@ -165,7 +157,8 @@ function screen_mtrix(){
             opacity: chanks_opacity,
             color: `rgba(2, 165, 4, 0)`,
             char: char,
-            char_w: char_w
+            char_w: char_w,
+            char_color: `rgba(2, 165, 4, 1)`
         } 
         
         w_str+=20;
@@ -190,11 +183,8 @@ function screen_mtrix(){
                 matrix[k].char = password_obj[key][k];
                 matrix[k].isWord = true;
                 matrix[k].char_range = Object.keys(password_obj[key]);
-                matrix[k].rect_w = matrix[k].char_range[matrix[k].char_range.length -1];
-
+                matrix[k].char_color = `rgba(2, 165, 4, 1)`;
             }
-            
-            
         }
     }
 
@@ -213,23 +203,39 @@ let rect_opacity = {
 function render_pass(matrix){
 
     for (let key in matrix) {
+        // if(rect_opacity_flag){
+        //     rect_opacity.chanks.forEach((elem, i, arr)=>{
+        //         // matrix[elem].char_color = `#081418`;
+        //         if(i == arr.length - 1 || elem.x == 200 || elem.x == 380){
+        //             ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w*2, 18);
 
+        //         }else{
+        //             ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, 20, 18);
+        //         }
+        //     })
+        // }
+        // matrix[key].hasOwnProperty('char_range')
+        if(rect_opacity.chanks){
+            
+            rect_opacity.chanks.forEach(elem=>{
+                // ctx.save();
+                ctx.fillStyle = `rgba(2, 165, 4, ${matrix[elem].opacity})`;
+                ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, matrix[elem].char_w + 4, 18)
+                // ctx.restore();
+            })
+        }
+            ctx.save();
+            ctx.fillStyle = `rgba(2, 165, 4, ${matrix[key].opacity})`;
+            ctx.fillRect(matrix[key].x, matrix[key].y - 14, matrix[key].char_w + 4, 18)
+            ctx.restore();
+        
+        
+        
+
+        ctx.fillStyle = matrix[key].char_color;
         ctx.fillText(matrix[key].char, matrix[key].x, matrix[key].y);
-
-        ctx.save();
-        ctx.fillStyle = `rgba(2, 165, 4, ${matrix[key].opacity})`;
-        // ctx.fillStyle = `rgba(2, 165, 4, 1)`;
-        ctx.fillRect(matrix[key].x, matrix[key].y - 14, matrix[key].char_w + 4, 18)
-        ctx.restore();
-
-        ctx.fillStyle = `rgba(2, 165, 4, 1)`;
-
     }
-    if(rect_opacity_flag){
-        rect_opacity.chanks.forEach(elem=>{
-            ctx.fillRect(matrix[elem].x, matrix[elem].y - 14, 10, 18)
-        })
-    }
+    
 
 }
 
@@ -247,6 +253,11 @@ function draw(){
     // ctx.fillText(layerX, 600, 100);
     requestAnimationFrame(draw);
 }
+// setInterval(() => {
+//     if(rect_opacity.chanks){
+//     console.log(matrix[rect_opacity.chanks[0]].opacity)
+//     }
+// }, 2000);
 
 function color_chanks(e){
     let x_off = 4,
@@ -260,14 +271,23 @@ function color_chanks(e){
             e.layerY <= matrix[key].y + 12
         ){
             matrix[key].opacity = 1;
+            matrix[key].char_color = `#081418`;
                 if(matrix[key].isWord){
+                    let range_arr = matrix[key].char_range;
+                    range_arr.forEach(elem=>{
+                        matrix[elem].opacity = 1;
+                        matrix[elem].char_color = `#081418`;
+
+                    })
                     rect_opacity_flag = true;
-                    rect_opacity.chanks = matrix[key].char_range;
+                    rect_opacity.chanks = matrix[key].char_range; 
                 }else{
                     rect_opacity_flag = false;
                 }
+
         }else{
             matrix[key].opacity = 0;
+            matrix[key].char_color = "rgba(2, 165, 4, 1)"
         }
         
     }
