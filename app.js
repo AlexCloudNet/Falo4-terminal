@@ -93,30 +93,39 @@ function render_text_terminal(){
 
 function screen_mtrix(){
     let start_words = [];
-
     let chanks_arr = Array.from(Array(chars_count*2).keys());
+    const result = [];
+    const count = 8;
+    for (let s = 0, e = count; s < chanks_arr.length; s += count, e += count)
+        result.push(chanks_arr.slice(s, e));
+    
+    chanks_arr = result;
     console.log(chanks_arr)
 
     for (let i = 0; i < screen.words_count; i++) {
-        let start_pos = chanks_arr[
-            Math.floor(Math.random()*(chanks_arr.length - screen.words_length))
+        
+        let chars_arr = chanks_arr[
+            Math.floor(Math.random()*(chanks_arr.length))
         ];
 
-        let chars_arr = [];
-        let highEnd = start_pos+screen.words_length - 1;
-        let lowEnd = start_pos;
-        for (let i = lowEnd; i <= highEnd; i++) {
-            chars_arr.push(i);
-        }
         start_words.push(chars_arr);
 
-        for (let j = 0; j < start_words.length; j++) {
-            chanks_arr = chanks_arr.filter(i => !start_words[j].includes(i)); 
-        }
-
+        // for (let j = 0; j < start_words.length; j++) {
+        //     chanks_arr = chanks_arr.filter(i => !start_words[j].includes(i)); 
+        // }
+        chanks_arr.forEach((elem, i, arr) => {
+            if(start_words.length > 0){
+                for (let j = 0; j < start_words.length; j++) {
+                    if(elem == start_words[j]) 
+                        chanks_arr = chanks_arr.filter(item => item !==start_words[j]); 
+                }
+            }
+            
+        })
     }
 
     console.log(chanks_arr);
+    console.log(start_words);
 
 
     let h_str = 140;
