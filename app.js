@@ -121,6 +121,7 @@ function screen_mtrix(){
 
     let h_str = 140;
     let w_str = 100;
+
     for (let i = 0; i < chars_count; i++) {
         let char = randomChar();
         let char_w = ctx.measureText(char).width;
@@ -189,31 +190,29 @@ function screen_mtrix(){
     }
 
     // Sets of secret character combinations
-    let comb_arr = [];
-
+    let matrix_comb_arr = [];
+    let matrix_length = Object.keys(matrix);
+    matrix_length = matrix_length.length - 1;
+    Object.entries(matrix).forEach(([key, value]) =>{
+        if(!value.isWord)
+        matrix_comb_arr.push(`${value.char}`);
+    }); 
+    console.log(matrix_comb_arr)
+    
     for(let elem in matrix){
         
         for (let i = 0; i < fillers.length; i++) {
             if(matrix[elem].char == fillers[i][0]){
-                for(let el in matrix){
-                    if(el <= elem) continue;
-                    // if(el.isWord) break;
-                    if(el == fillers[i][1] ){
-                        matrix[elem].isStartComb = true; 
-                        matrix[el].isEndComb = true; 
-                    }
+                for (let j = elem+1; j < matrix_length; j++) {
+                    // if(matrix[j].isWord) break;
+                    // if(matrix[j] == fillers[i][1] ){
+                    //     matrix[elem].isStartComb = true; 
+                    //     matrix[el].isEndComb = true; 
+                    // }
                 }
-                
 
-                // matrix[elem].isStartComb = true;         
             }
         }
-
-        // for (let i = 0; i < fillers.length; i++) {
-        //     if(matrix[elem].char == fillers[i][1]){
-        //         matrix[elem].isEndComb = true;         
-        //     }
-        // }
             
     }
     
