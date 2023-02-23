@@ -43,7 +43,6 @@ let screen = {
     password: undefined,
 }
 let attempts = 4;
-// let chars_count = screen.w_char_count * screen.h_char_count;
 let chars_count = (screen.w_char_count * screen.h_char_count);
 
 $.ajax({
@@ -57,6 +56,7 @@ $.ajax({
         screen.words_length = password_arr[0].length;
         screen.password = password_arr[password_arr.length - 1];
 
+        console.log(data)
         screen_mtrix();
         draw();
         canvas.addEventListener('mousemove', color_chanks);
@@ -90,14 +90,18 @@ function render_text_terminal(){
 }
 
 function screen_mtrix(){
+    // вложенный массив, где по длине слова выбраны чанки на матрице
     let start_words = [];
+    // chanks_arr - общее колличество чанков
     let chanks_arr = Array.from(Array(chars_count*2).keys());
     const result = [];
-    const count = 8;
+    // count - длина одного слова
+    const count = screen.words_length;
     for (let s = 0, e = count; s < chanks_arr.length; s += count, e += count)
         result.push(chanks_arr.slice(s, e));
     
     chanks_arr = result;
+
     for (let i = 0; i < screen.words_count; i++) {
         
         let chars_arr = chanks_arr[
@@ -117,13 +121,19 @@ function screen_mtrix(){
         })
     }
 
+    //создали вложенный массив, где по длине слова выбраны чанки на матрице
+    // console.log(start_words)
+    // console.log(chanks_arr)
 
+    let matrix_comb_arr = [];
 
     let h_str = 140;
     let w_str = 100;
 
     for (let i = 0; i < chars_count; i++) {
         let char = randomChar();
+        if( fillers.flat().includes(char) )
+        matrix_comb_arr.push([i,char]);
         let char_w = ctx.measureText(char).width;
 
         if(i%screen.w_char_count == 0 && i >= screen.w_char_count){
@@ -146,6 +156,10 @@ function screen_mtrix(){
     w_str = 380;
     for (let i = 0; i < chars_count; i++) {
         let char = randomChar();
+        let index = i + 96;
+
+        if( fillers.flat().includes(char) )
+            matrix_comb_arr.push([index,char]);
         let char_w = ctx.measureText(char).width;
 
         if(i%screen.w_char_count == 0 && i >= screen.w_char_count){
@@ -189,39 +203,57 @@ function screen_mtrix(){
         }
     }
 
-    // Sets of secret character combinations
-    let matrix_comb_arr = [];
-    let matrix_length = Object.keys(matrix);
-    matrix_length = matrix_length.length - 1;
-    Object.entries(matrix).forEach(([key, value]) =>{
-        if(!value.isWord)
-        matrix_comb_arr.push(`${value.char}`);
-    }); 
-    console.log(matrix_comb_arr)
+
+    let chanks_range = chanks_arr.flat();
+    let secret_combs_arr = [];
+    matrix_comb_arr.forEach( (elem, i, arr)=>{
+        // if(chanks_range.includes(elem[0])) arr.splice(i,1);
+        if(chanks_range.includes(elem[0])){
+            secret_combs_arr.push(elem)
+        }
+    })
     
+    console.log(chanks_range);
+    console.log(secret_combs_arr);
+
+    
+    
+    // поиск по многомерному массиву
+    // if(fillers.some(arr => arr.some( arr => arr.includes(elem.char)))){
+ 
+
+
+    /*
     for(let elem in matrix){
         
         for (let i = 0; i < fillers.length; i++) {
             if(matrix[elem].char == fillers[i][0]){
-                for (let j = elem+1; j < matrix_length; j++) {
-                    // if(matrix[j].isWord) break;
-                    // if(matrix[j] == fillers[i][1] ){
-                    //     matrix[elem].isStartComb = true; 
-                    //     matrix[el].isEndComb = true; 
-                    // }
-                }
+                // for (let j = elem+1; j < matrix_length; j++) {
+                //     if(matrix[j].isWord) break;
+                //     if(matrix[j] == fillers[i][1] ){
+                //         matrix[elem].isStartComb = true; 
+                //         matrix[el].isEndComb = true; 
+                //     }
+                // }
+                matrix[elem].isStartComb = true; 
+                matrix[elem].filler = i; 
 
+            }
+            if(matrix[elem].char == fillers[i][1]){
+                matrix[elem].isEndComb = true;
+                matrix[elem].filler = i; 
             }
         }
             
     }
-    
+    */
 
-console.log(password_obj);
-console.log(matrix);
-
+// console.log( matrix_comb_arr);
+// console.log(password_obj);
 
 }
+
+
 
 let rect_opacity_flag = false;
 let rect_opacity = {
