@@ -122,7 +122,6 @@ function screen_mtrix(){
 
     //создали вложенный массив, где по длине слова выбраны чанки на матрице
     // console.log(start_words)
-    console.log(chanks_arr)
 
     let matrix_comb_arr = [];
 
@@ -131,8 +130,19 @@ function screen_mtrix(){
 
     for (let i = 0; i < chars_count; i++) {
         let char = randomChar();
-        if( fillers.flat().includes(char) )
-        matrix_comb_arr.push([i,char]);
+        if( fillers.flat().includes(char) ){
+            let index_char;
+            let start_end;
+            fillers.forEach( (elem,i) => {
+                if(elem.includes(char)){
+                    start_end = elem.indexOf(char);
+                    index_char = i;
+                }
+
+            });
+            matrix_comb_arr.push([i,char,index_char,start_end]);
+        }
+        
         let char_w = ctx.measureText(char).width;
 
         if(i%screen.w_char_count == 0 && i >= screen.w_char_count){
@@ -157,8 +167,20 @@ function screen_mtrix(){
         let char = randomChar();
         let index = i + 96;
 
-        if( fillers.flat().includes(char) )
-            matrix_comb_arr.push([index,char]);
+        if( fillers.flat().includes(char) ){
+            let index_char;
+            let start_end;
+            fillers.forEach( (elem,i) => {
+                if(elem.includes(char)){
+                    start_end = elem.indexOf(char);
+                    index_char = i;
+                }
+
+            });
+            matrix_comb_arr.push([index,char,index_char,start_end]);
+        }
+
+
         let char_w = ctx.measureText(char).width;
 
         if(i%screen.w_char_count == 0 && i >= screen.w_char_count){
@@ -217,9 +239,25 @@ function screen_mtrix(){
         acc[acc.length - 1].push(n),
         acc
       ), [])
-      
-    console.log(arr_r)
-    console.log(secret_combs_arr);
+    
+    let no_words_fields = {};
+    
+    for (let i = 0; i < arr_r.length; i++) {
+        const range = arr_r[i];
+        no_words_fields[i] = [];
+        for (let j = 0; j < secret_combs_arr.length; j++) {
+            const elem = secret_combs_arr[j];
+            if(range.includes(elem[0]))
+                no_words_fields[i].push(elem);
+        }
+    }
+
+    for (const key in no_words_fields) {
+        const element = no_words_fields[key];
+    }
+    console.log(no_words_fields)
+    // console.log(arr_r)
+    // console.log(secret_combs_arr);
 
     
     
