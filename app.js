@@ -99,15 +99,14 @@ function screen_mtrix(){
     const count = screen.words_length;
     for (let s = 0, e = count; s < chanks_arr.length; s += count, e += count)
         result.push(chanks_arr.slice(s, e));
-    
     chanks_arr = result;
 
+    //разбиваем на подмассивы
     for (let i = 0; i < screen.words_count; i++) {
         
         let chars_arr = chanks_arr[
             Math.floor(Math.random()*(chanks_arr.length))
         ];
-
         start_words.push(chars_arr);
 
         chanks_arr.forEach((elem, i, arr) => {
@@ -123,7 +122,7 @@ function screen_mtrix(){
 
     //создали вложенный массив, где по длине слова выбраны чанки на матрице
     // console.log(start_words)
-    // console.log(chanks_arr)
+    console.log(chanks_arr)
 
     let matrix_comb_arr = [];
 
@@ -213,7 +212,13 @@ function screen_mtrix(){
         }
     })
     
-    console.log(chanks_range);
+    let arr_r = chanks_range.reduce((acc, n, i, a) => (
+        n === a[i - 1] + 1 || acc.push([]),
+        acc[acc.length - 1].push(n),
+        acc
+      ), [])
+      
+    console.log(arr_r)
     console.log(secret_combs_arr);
 
     
@@ -248,7 +253,6 @@ function screen_mtrix(){
     }
     */
 
-// console.log( matrix_comb_arr);
 // console.log(password_obj);
 
 }
@@ -304,6 +308,7 @@ function main_render(){
     render_text_terminal();
     render_pass(matrix);
 }
+
 let chank_count = 0;
 function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
